@@ -62,16 +62,25 @@ For starters, here's a playbook that contains just one play::
       remote_user: root
       tasks:
       - name: ensure apache is at the latest version
-        yum: name=httpd state=latest
+        yum: 
+          name: httpd 
+          state: latest
       - name: write the apache config file
-        template: src=/srv/httpd.j2 dest=/etc/httpd.conf
+        template: 
+          src: /srv/httpd.j2 
+          dest: /etc/httpd.conf
         notify:
         - restart apache
       - name: ensure apache is running (and enable it at boot)
-        service: name=httpd state=started enabled=yes
+        service: 
+        name: httpd 
+        state: started 
+        enabled: yes
       handlers:
         - name: restart apache
-          service: name=httpd state=restarted
+          service: 
+            name: httpd 
+            state: restarted
 
 When working with tasks that have really long parameters or modules that take 
 many parameters, you can break tasks items over multiple lines to improve the 
@@ -336,8 +345,12 @@ a space and indent any continuation lines::
 
     tasks:
       - name: Copy ansible inventory file to client
-        copy: src=/etc/ansible/hosts dest=/etc/ansible/hosts
-                owner=root group=root mode=0644
+        copy: 
+          src: /etc/ansible/hosts 
+          dest: /etc/ansible/hosts
+          owner: root
+          group: root 
+          mode: 0644
 
 Variables can be used in action lines.   Suppose you defined
 a variable called ``vhost`` in the ``vars`` section, you could do this::
@@ -346,7 +359,7 @@ a variable called ``vhost`` in the ``vars`` section, you could do this::
      - name: create a virtual host file for {{ vhost }}
        template:
          src: somefile.j2
-         dest: /etc/httpd/conf.d/{{ vhost }}
+         dest: "/etc/httpd/conf.d/{{ vhost }}"
 
 Those same variables are usable in templates, which we'll get to later.
 
@@ -430,7 +443,7 @@ As of Ansible 2.2, handlers can also "listen" to generic topics, and tasks can n
         - name: restart apache
           service:
             name: apache
-            state:restarted
+            state: restarted
           listen: "restart web services"
 
     tasks:
